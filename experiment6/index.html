@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Repatriation of Artifacts - Restoring Cultural Brilliance</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" type="text/css" href="css/site.css">
-  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" type="text/css" href="./css/site.css">
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
           integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
           crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.js"></script>
-  <script type="text/javascript" src="js/site.js" defer></script>
-  <script type="text/javascript" src="js/project.js" defer></script>
-  <script type="text/javascript" src="js/sketch.js" defer></script>
+
+  <script type="text/javascript" src="./js/site.js" defer></script>
+  <script type="text/javascript" src="./js/project.js" defer></script>
+  <script type="text/javascript" src="./js/sketch.js" defer></script>
 </head>
 <body>
   <main id="content">
@@ -23,10 +26,17 @@
           <!-- The canvas will be inserted here -->
         </div>
         <div class="fullscreen-box">
-          <button id="fullscreen">Fullscreen</button>
+          <button id="fullscreen-btn">Fullscreen</button>
         </div>
       </div>
     </section>
   </main>
+
+  <script>
+    document.getElementById("fullscreen-btn").addEventListener("click", function () {
+      let fs = fullscreen();
+      fullscreen(!fs);
+    });
+  </script>
 </body>
 </html>
