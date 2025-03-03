@@ -1,3 +1,11 @@
+/*
+Hasina Esteqlal, Ben Hess, 
+Celeste Herrera, Lyle Watkins
+02 Mar 2025
+for CMPM 169: Creative Coding
+Instructor: Wes Modes
+*/
+
 // globals
 let x;
 let y;
