@@ -1,21 +1,39 @@
 /*
 Hasina Esteqlal, Ben Hess, 
 Celeste Herrera, Lyle Watkins
-02 Mar 2025
+03 Mar 2025
 for CMPM 169: Creative Coding
 Instructor: Wes Modes
 */
 
-// globals
+// Constants
+const ARTIFACTS = ['moctezuma_headdress', 'hoa_hakananai_a', 'tjentmutengebtiu_mummy'];
+const IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
+                   ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
+                   ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
+const FADE_RATE = 2; // Change in tint per frame
+
+// Globals
 let x;
 let y;
 let isDragging = false;
-let canvasContainer; 
+let slideshows = [[], [], []];
+let imgIndex = 0;
+let currImgOpacity = 255;
+let nextImgOpacity = 0;
+let canvasContainer;
 
-// images
-const IMG_PATHS = ['Rapa nui, Civilization.png', 'Rapa nui, Rapanui, Easter island.png', 
-  'Chichen itza, Yucatan, Pyramids.png', 'Culture, Mexico, Ritual image.png', 'Mexico Flag.png', 'Moctezuma’s headdress.png',
-'All Gizah Pyramids.png', 'Egypt, Thebes, Medinet-habu.png', 'Mummy of Tjentmutengebtiu.png'];
+function preload() {
+  for (let i = 0; i < ARTIFACTS.length; i++) {
+    let artifactName = ARTIFACTS[i];
+    let imgNames = IMG_NAMES[i];
+    for (let imgName of imgNames) {
+      let img = loadImage('assets/' + artifactName + '/slideshow/' + imgName);
+      slideshows[i].push(img);
+    }
+  }
+  console.log(slideshows);
+}
 
 function resizeScreen() {
   resizeCanvas(canvasContainer.width, canvasContainer.height);
@@ -34,6 +52,13 @@ function setup() {
   // Initialize positions
   x = width / 4;
   y = height / 2;
+
+  // Resize images to fit the screen
+  for (let slideshow of slideshows) {
+    for (let img of slideshow) {
+      if (img.height > img.width) img.resize(width, 0); else img.resize(0, height);
+    }
+  }
 }
 
 function draw() {
@@ -83,6 +108,7 @@ function draw() {
   }
   pop();
 
+  // Draw artifact
   fill(89, 79, 227);
   noStroke();
   circle(x, y, 50);
