@@ -12,19 +12,19 @@ let y;
 let isDragging = false;
 let canvasContainer; 
 
+// images
+const IMG_PATHS = ['Rapa nui, Civilization.png', 'Rapa nui, Rapanui, Easter island.png', 
+  'Chichen itza, Yucatan, Pyramids.png', 'Culture, Mexico, Ritual image.png', 'Mexico Flag.png', 'Moctezuma’s headdress.png',
+'All Gizah Pyramids.png', 'Egypt, Thebes, Medinet-habu.png', 'Mummy of Tjentmutengebtiu.png'];
+
 function resizeScreen() {
   resizeCanvas(canvasContainer.width, canvasContainer.height);
 }
 
 function setup() {
-  // Get the canvas container element
   canvasContainer = select("#canvas-container");
-
-  // Create a canvas and attach it to the container
   let canvas = createCanvas(canvasContainer.width, canvasContainer.height);
   canvas.parent("canvas-container");
-
-  // console.log("Canvas created and attached to #canvas-container"); // Debugging
 
   windowResized = () => {
     resizeScreen();
