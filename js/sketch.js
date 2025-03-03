@@ -75,12 +75,30 @@ function setup() {
 function draw() {
   background(0);
 
-  // Draw background rectangles
-  fill(89, 79, 227, 128);
-  rect(width / 2, 0, width / 2, height);
+  // RIGHT SIDE SLIDESHOW //
+  let slideshow = slideshows[artifactIndex];
+  // -- Get current and next images
+  let currImg = slideshow[imgIndex];
+  let nextImg = slideshow[(imgIndex + 1) % slideshow.length]; // Modulo allows for easy looping through image array
+  // -- Draw each image with their respective opacity value
+  tint(255, currImgOpacity);
+  image(currImg, width / 2 + width / 4, height / 2);
+  tint(255, nextImgOpacity);
+  image(nextImg, width / 2 + width / 4, height / 2);
+  // -- Decrease the current image's opacity and increase the next images opacity until they have completely faded in/out
+  currImgOpacity -= FADE_RATE;
+  nextImgOpacity += FADE_RATE;
+  if (currImgOpacity <= 0) {
+    imgIndex = (imgIndex + 1) % slideshow.length;
+    currImgOpacity = 255;
+    nextImgOpacity = 0;
+  }
 
-  fill(50, 50, 50);
-  rect(width / 4 - 50, height / 2 + 25, 100, 50);
+  // LEFT SIDE MUSEUM IMAGE //
+  // -- TODO
+  // -- for now, draw a dark rectangle in its place
+  fill(20);
+  rect(0, 0, width / 2, height);
 
   cursor(ARROW);
   if (abs(mouseX - x) < 40 && abs(mouseY - y) < 40) {
@@ -119,6 +137,11 @@ function draw() {
   }
   pop();
 
+  // Draw pedestal
+  fill(50, 50, 50);
+  rect(width / 4 - 50, height / 2 + 25, 100, 50);
+
   // Draw artifact
+  tint(255, 255);
   image(artifactImgs[artifactIndex], x, y);
 }
