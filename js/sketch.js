@@ -8,31 +8,39 @@ Instructor: Wes Modes
 
 // Constants
 const ARTIFACTS = ['moctezuma_headdress', 'hoa_hakananai_a', 'tjentmutengebtiu_mummy'];
-const IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
-                   ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
-                   ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
+const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
+                             ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
+                             ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
 const FADE_RATE = 2; // Change in tint per frame
+const ARTIFACT_SIZE = 200; // Width of artifact images
 
 // Globals
 let x;
 let y;
+let canvasContainer;
+let artifactIndex = 0;
 let isDragging = false;
+//// Images
+let artifactImgs = [];
 let slideshows = [[], [], []];
 let imgIndex = 0;
 let currImgOpacity = 255;
 let nextImgOpacity = 0;
-let canvasContainer;
 
 function preload() {
   for (let i = 0; i < ARTIFACTS.length; i++) {
+    // Load artifact image and add to array
     let artifactName = ARTIFACTS[i];
-    let imgNames = IMG_NAMES[i];
+    let img = loadImage('assets/' + artifactName + '/artifact.png');
+    artifactImgs.push(img);
+
+    // Load slideshow images and add to array
+    let imgNames = SLIDESHOW_IMG_NAMES[i];
     for (let imgName of imgNames) {
       let img = loadImage('assets/' + artifactName + '/slideshow/' + imgName);
       slideshows[i].push(img);
     }
   }
-  console.log(slideshows);
 }
 
 function resizeScreen() {
@@ -40,6 +48,8 @@ function resizeScreen() {
 }
 
 function setup() {
+  imageMode(CENTER);
+  noStroke();
   canvasContainer = select("#canvas-container");
   let canvas = createCanvas(canvasContainer.width, canvasContainer.height);
   canvas.parent("canvas-container");
@@ -59,6 +69,7 @@ function setup() {
       if (img.height > img.width) img.resize(width, 0); else img.resize(0, height);
     }
   }
+  for (let img of artifactImgs) img.resize(ARTIFACT_SIZE, 0);
 }
 
 function draw() {
@@ -109,8 +120,5 @@ function draw() {
   pop();
 
   // Draw artifact
-  fill(89, 79, 227);
-  noStroke();
-  circle(x, y, 50);
-  rect(x - 10, y - 50, 20, 50);
+  image(artifactImgs[artifactIndex], x, y);
 }
