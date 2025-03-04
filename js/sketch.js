@@ -47,7 +47,6 @@ function preload() {
     let museumName = MUSEUM_IMG[i];
     let museumImg = loadImage('assets/museum_images/' + museumName);
     museumImgs.push(museumImg);
-
   }
 }
 
@@ -78,7 +77,7 @@ function setup() {
     }
   }
   for (let img of artifactImgs) img.resize(ARTIFACT_SIZE, 0);
-  for (let img of museumImgs) img.resize(width, height);
+  for (let img of museumImgs) img.resize(0, height);
 }
 
 function draw() {
@@ -104,10 +103,9 @@ function draw() {
   }
 
   // LEFT SIDE MUSEUM IMAGE //
-  let museumImg = museumImgs[artifactIndex];
+  let museumImg = museumImgs[artifactIndex].get(0, 0, width / 2, height);
   tint(255, 255);
-  let museumImg2 = museumImg.get(250, 0, 400, height);
-  image(museumImg2, width/4, height/2);
+  image(museumImg, width / 4, height / 2);
 
   cursor(ARROW);
   if (abs(mouseX - x) < 40 && abs(mouseY - y) < 40) {
