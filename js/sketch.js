@@ -11,6 +11,7 @@ const ARTIFACTS = ['moctezuma_headdress', 'hoa_hakananai_a', 'tjentmutengebtiu_m
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
+const MUSEUM_IMG = ['weltmuseum.webp','britishmuseum_hoa.jpg','britishmuseum_mummy.jpg'];
 const FADE_RATE = 2; // Change in tint per frame
 const ARTIFACT_SIZE = 200; // Width of artifact images
 
@@ -23,6 +24,7 @@ let isDragging = false;
 // -- Images
 let artifactImgs = [];
 let slideshows = [[], [], []];
+let museumImgs = [];
 let imgIndex = 0;
 let currImgOpacity = 255;
 let nextImgOpacity = 0;
@@ -40,6 +42,12 @@ function preload() {
       let img = loadImage('assets/' + artifactName + '/slideshow/' + imgName);
       slideshows[i].push(img);
     }
+
+    // Load museum image and add to array
+    let museumName = MUSEUM_IMG[i];
+    let museumImg = loadImage('assets/museum_images/' + museumName);
+    museumImgs.push(museumImg);
+
   }
 }
 
@@ -70,6 +78,7 @@ function setup() {
     }
   }
   for (let img of artifactImgs) img.resize(ARTIFACT_SIZE, 0);
+  for (let img of museumImgs) img.resize(width, height);
 }
 
 function draw() {
@@ -95,10 +104,10 @@ function draw() {
   }
 
   // LEFT SIDE MUSEUM IMAGE //
-  // -- TODO
-  // -- for now, draw a dark rectangle in its place
-  fill(20);
-  rect(0, 0, width / 2, height);
+  let museumImg = museumImgs[artifactIndex];
+  tint(255, 255);
+  let museumImg2 = museumImg.get(250, 0, 400, height);
+  image(museumImg2, width/4, height/2);
 
   cursor(ARROW);
   if (abs(mouseX - x) < 40 && abs(mouseY - y) < 40) {
