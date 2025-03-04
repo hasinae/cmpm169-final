@@ -11,7 +11,7 @@ const ARTIFACTS = ['moctezuma_headdress', 'hoa_hakananai_a', 'tjentmutengebtiu_m
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
-const MUSEUM_IMG = ['weltmuseum.jpg','britishmuseum_hoa.jpg','britishmuseum_mummy.jpg'];
+const MUSEUM_IMG = ['weltmuseum.jpg','britishmuseum_hoa.png','britishmuseum_mummy.jpg'];
 const FADE_RATE = 2; // Change in tint per frame
 const ARTIFACT_SIZE = 200; // Width of artifact images
 
