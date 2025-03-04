@@ -20,7 +20,7 @@ let y;
 let canvasContainer;
 let artifactIndex = 0;
 let isDragging = false;
-//// Images
+// -- Images
 let artifactImgs = [];
 let slideshows = [[], [], []];
 let imgIndex = 0;
@@ -73,7 +73,7 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  background(255);
 
   // RIGHT SIDE SLIDESHOW //
   let slideshow = slideshows[artifactIndex];
