@@ -103,7 +103,7 @@ function draw() {
   }
 
   // LEFT SIDE MUSEUM IMAGE //
-  let museumImg = museumImgs[artifactIndex].get(0, 0, width / 2, height);
+  let museumImg = museumImgs[artifactIndex].get(450, 0, width / 2, height);
   tint(255, 255);
   image(museumImg, width / 4, height / 2);
 
