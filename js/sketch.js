@@ -7,7 +7,9 @@ Instructor: Wes Modes
 */
 
 // Constants
-const ARTIFACTS = ['moctezuma_headdress', 'hoa_hakananai_a', 'tjentmutengebtiu_mummy'];
+const ARTIFACTS = [{name: 'moctezuma_headdress', repatriated: false}, 
+                   {name: 'hoa_hakananai_a', repatriated: false}, 
+                   {name: 'tjentmutengebtiu_mummy', repatriated: false}];
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
@@ -46,7 +48,7 @@ let nextImgOpacity = 0;
 function preload() {
   for (let i = 0; i < ARTIFACTS.length; i++) {
     // Load artifact image and add to array
-    let artifactName = ARTIFACTS[i];
+    let artifactName = ARTIFACTS[i].name;
     let img = loadImage('assets/' + artifactName + '/artifact.png');
     artifactImgs.push(img);
 
@@ -151,12 +153,14 @@ function draw() {
     if(artifactIndex < 0) {
       artifactIndex = ARTIFACTS.length - 1;
     }
+    checkRepatriation(artifactX, artifactY);
   }
   if(button(artifactX + 100, artifactY, ">>")) {
     artifactIndex += 1;
     if(artifactIndex >= ARTIFACTS.length) {
       artifactIndex = 0;
     }
+    checkRepatriation(artifactX, artifactY);
   }
 
   // Drag logic for artifact
@@ -179,8 +183,10 @@ function draw() {
   } else {
     if (x < width / 2) {
       x += ((width / 4) - x) * 0.1;
+      ARTIFACTS[artifactIndex].repatriated = false;
     } else {
       x += ((width / 4 * 3) - x) * 0.1;
+      ARTIFACTS[artifactIndex].repatriated = true;
     }
     y += ((height / 2) - y) * 0.1;
   }
@@ -211,4 +217,14 @@ function draw() {
   // Draw artifact
   tint(255, 255);
   image(artifactImgs[artifactIndex], x, y);
+}
+
+function checkRepatriation(artifactX, artifactY) {
+  if (ARTIFACTS[artifactIndex].repatriated) {
+    x = width / 4 * 3;
+    y = height / 2;
+  } else {
+    x = artifactX;
+    y = artifactY;
+  }
 }
