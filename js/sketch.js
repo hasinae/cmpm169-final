@@ -12,6 +12,19 @@ const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dr
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
 const MUSEUM_IMG = ['weltmuseum.jpg','britishmuseum_hoa.png','britishmuseum_mummy.jpg'];
+const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec emperor during the Spanish conquest
+  of the early 16th century, this artifact is recognized to have been a symbol of political and religious power in
+  ancient Mexico. Its origin and function are disputed, as there exists no known evidence proving that it belonged
+  to Moctezuma II and it is unclear when and for what purposes it may have been worn. It is made of quetzal and
+  other feathers, sewn together with gold detailing, and is currently held in the Weltmuseum (World Museum) in
+  Vienna, Austria. Mexico has repeatedly requested the artifact be returned in ongoing repatriation dialogues.`,
+  `A moai statue from Easter Island, created by the Rapa Nui people between the 11th and 12th centuries. The
+  statue is carved from basalt and is about 2.5 meters in height. It is distinguishable by the carvings on its
+  back, which are associated with the bird man religion. The statue was removed by a British ship’s crew in 1868
+  and currently resides in the British Museum in London. In 2018, a written request was made for the return of
+  Hoa Hakanani’a, and the museum met with representatives of Rapa Nui, but the statue remains on display in London.`,
+  `A painted casting, holding the mummified remains of a priestess called Tjentmutengebtiu from Egypt’s 21st dynasty.
+  This artifact is currently in the British Museum.`];
 const FADE_RATE = 2; // Change in tint per frame
 const ARTIFACT_SIZE = 200; // Width of artifact images
 
@@ -21,6 +34,7 @@ let y;
 let canvasContainer;
 let artifactIndex = 0;
 let isDragging = false;
+let mouseDown = false;
 // -- Images
 let artifactImgs = [];
 let slideshows = [[], [], []];
@@ -80,8 +94,30 @@ function setup() {
   for (let img of museumImgs) img.resize(0, height);
 }
 
+function button(x, y, t) {
+  let result = false;
+  if(abs(mouseX - x) < 20 && abs(mouseY - y) < 30 && !isDragging) {
+    fill(255);
+    cursor(HAND);
+    if(mouseIsPressed && !mouseDown) {
+      result = true;
+      mouseDown = true;
+    }
+  } else {
+    fill(200);
+  }
+  stroke(0);
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  text(t, x, y);
+  return result;
+}
+
 function draw() {
   background(255);
+
+  let artifactX = width / 4;
+  let artifactY = height / 2;
 
   // RIGHT SIDE SLIDESHOW //
   let slideshow = slideshows[artifactIndex];
@@ -108,6 +144,22 @@ function draw() {
   image(museumImg, width / 4, height / 2);
 
   cursor(ARROW);
+
+  // Draw buttons
+  if(button(artifactX - 100, artifactY, "<<")) {
+    artifactIndex -= 1;
+    if(artifactIndex < 0) {
+      artifactIndex = ARTIFACTS.length - 1;
+    }
+  }
+  if(button(artifactX + 100, artifactY, ">>")) {
+    artifactIndex += 1;
+    if(artifactIndex >= ARTIFACTS.length) {
+      artifactIndex = 0;
+    }
+  }
+
+  // Drag logic for artifact
   if (abs(mouseX - x) < 40 && abs(mouseY - y) < 40) {
     if (mouseIsPressed) {
       isDragging = true;
@@ -117,6 +169,7 @@ function draw() {
 
   if (!mouseIsPressed) {
     isDragging = false;
+    mouseDown = false;
   }
 
   if (isDragging) {
@@ -132,9 +185,10 @@ function draw() {
     y += ((height / 2) - y) * 0.1;
   }
 
+  // Artifact shine effect
   let r = constrain((x - (width / 4)) / (width / 2), 0, 1);
-
   fill(255, 255, 255, floor(r * 50));
+  noStroke();
   push();
   translate(x, y);
   rotate(frameCount * 0.01);
@@ -144,9 +198,15 @@ function draw() {
   }
   pop();
 
-  // Draw pedestal
-  fill(50, 50, 50);
-  rect(width / 4 - 50, height / 2 + 25, 100, 50);
+  // Draw description
+  fill(0, 0, 0, 128);
+  noStroke();
+  rect(0, artifactY + 100, width / 2, height - (artifactY + 100));
+  
+  fill(255, 255, 255);
+  textAlign(LEFT, TOP);
+  textSize(14);
+  text(DESCRIPTIONS[artifactIndex], 10, artifactY + 110, width / 2 - 20);
 
   // Draw artifact
   tint(255, 255);
