@@ -8,7 +8,7 @@ Instructor: Wes Modes
 
 // Constants
 const ARTIFACTS = [{name: 'moctezuma_headdress', size: 200, repatriated: false}, 
-                   {name: 'hoa_hakananai_a', size: 250, repatriated: false}, 
+                   {name: 'hoa_hakananai_a', size: 120, repatriated: false}, 
                    {name: 'tjentmutengebtiu_mummy', size: 500, repatriated: false}];
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
@@ -31,8 +31,8 @@ const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec empe
 const FADE_RATE = 2; // Change in tint per frame
 const LERP_RATE = 0.1; // Rate of interpolation for artifact movement
 const HANDLE_SIZE = 40; // Size of grabbable area around artifact
-const BUTTON_SPACING = 150; // Distance from artifact to buttons
-const BUTTON_SIZE = 30;
+const BUTTON_SPACING = 255; // Distance from artifact to buttons
+const BUTTON_SIZE = 50;
 
 // Globals
 let currPos; // Current artifact position
@@ -118,13 +118,14 @@ function button(x, y, t) {
   }
   stroke(0);
   textAlign(CENTER, CENTER);
-  textSize(24);
+  textSize(BUTTON_SIZE);
   text(t, x, y);
   return result;
 }
 
 function draw() {
   background(255);
+  cursor(ARROW);
 
   // RIGHT SIDE SLIDESHOW //
   let slideshow = slideshows[artifactIndex];
@@ -151,14 +152,14 @@ function draw() {
   image(museumImg, width / 4, height / 2);
 
   // Button logic for changing artifacts
-  if(button(museumPos.x - BUTTON_SPACING, museumPos.y, "<<")) {
+  if(button(museumPos.x - BUTTON_SPACING, museumPos.y, "<")) {
     artifactIndex -= 1;
     if(artifactIndex < 0) {
       artifactIndex = ARTIFACTS.length - 1;
     }
     checkRepatriation();
   }
-  if(button(museumPos.x + BUTTON_SPACING, museumPos.y, ">>")) {
+  if(button(museumPos.x + BUTTON_SPACING, museumPos.y, ">")) {
     artifactIndex += 1;
     if(artifactIndex >= ARTIFACTS.length) {
       artifactIndex = 0;
@@ -172,7 +173,7 @@ function draw() {
       isDragging = true;
     }
     cursor(HAND);
-  } else cursor(ARROW);
+  }
 
   if (!mouseIsPressed) {
     isDragging = false;
