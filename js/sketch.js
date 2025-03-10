@@ -23,16 +23,17 @@ const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec empe
   Vienna, Austria. Mexico has repeatedly requested the artifact be returned in ongoing repatriation dialogues.`,
   `A moai statue from Easter Island, created by the Rapa Nui people between the 11th and 12th centuries. The
   statue is carved from basalt and is about 2.5 meters in height. It is distinguishable by the carvings on its
-  back, which are associated with the bird man religion. The statue was removed by a British ship’s crew in 1868
+  back, which are associated with the bird man religion. The statue was removed by a British ship's crew in 1868
   and currently resides in the British Museum in London. In 2018, a written request was made for the return of
-  Hoa Hakanani’a, and the museum met with representatives of Rapa Nui, but the statue remains on display in London.`,
-  `A painted casting, holding the mummified remains of a priestess called Tjentmutengebtiu from Egypt’s 21st dynasty.
+  Hoa Hakananai'a, and the museum met with representatives of Rapa Nui, but the statue remains on display in London.`,
+  `A painted casting, holding the mummified remains of a priestess called Tjentmutengebtiu from Egypt's 21st dynasty.
   This artifact is currently in the British Museum.`];
 const FADE_RATE = 2; // Change in tint per frame
 const LERP_RATE = 0.1; // Rate of interpolation for artifact movement
 const HANDLE_SIZE = 40; // Size of grabbable area around artifact
 const BUTTON_SPACING = 255; // Distance from artifact to buttons
 const BUTTON_SIZE = 50;
+const MAX_MOVE_FREQ = 60; // Maximum # of frames in between random artifact movement
 
 // Globals
 let currPos; // Current artifact position
@@ -42,7 +43,9 @@ let goalPos;
 let canvasContainer;
 let artifactIndex = 0;
 let isDragging = false;
+let isMoving = false;
 let mouseDown = false;
+let moveCounter = 0;
 // -- Images
 let artifactImgs = [];
 let slideshows = [[], [], []];
@@ -106,7 +109,7 @@ function setup() {
 
 function button(x, y, t) {
   let result = false;
-  if(abs(mouseX - x) < BUTTON_SIZE && abs(mouseY - y) < BUTTON_SIZE && !isDragging) {
+  if(abs(mouseX - x) < BUTTON_SIZE && abs(mouseY - y) < BUTTON_SIZE && !isDragging && !isMoving) {
     fill(255);
     cursor(HAND);
     if(mouseIsPressed && !mouseDown) {
@@ -167,9 +170,9 @@ function draw() {
     checkRepatriation();
   }
 
-  // Drag logic for artifact
+  // Artifact dragging logic
   if (abs(mouseX - currPos.x) < HANDLE_SIZE && abs(mouseY - currPos.y) < HANDLE_SIZE) {
-    if (mouseIsPressed) {
+    if (mouseIsPressed && !isMoving) {
       isDragging = true;
     }
     cursor(HAND);
@@ -183,14 +186,29 @@ function draw() {
   if (isDragging) {
     cursor(HAND);
     currPos = createVector(mouseX, mouseY);
-    goalPos = createVector(mouseX, mouseY);
-  } else {
+    if (!isMoving) goalPos = createVector(mouseX, mouseY);
+    if (moveCounter == 0) {
+      isMoving = true;
+      isDragging = false;
+      goalPos = createVector(museumPos.x + random(-100, 100), currPos.y + random(-100, 100));
+    }
+    moveCounter--;
+  } else if (!isMoving) {
     if (currPos.x < width / 2) {
       goalPos = createVector(museumPos.x, museumPos.y);
       ARTIFACTS[artifactIndex].repatriated = false;
     } else {
       goalPos = createVector(homelandPos.x, homelandPos.y);
       ARTIFACTS[artifactIndex].repatriated = true;
+    }
+  }
+
+  if (isMoving) {
+    cursor(ARROW);
+    console.log("Moving. currPos: " + currPos + " goalPos: " + goalPos);
+    if (currPos.dist(goalPos) < 1) {
+      moveCounter = round(random(0, MAX_MOVE_FREQ));
+      isMoving = false;
     }
   }
 
