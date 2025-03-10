@@ -14,6 +14,7 @@ const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dr
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
 const MUSEUM_IMG = ['weltmuseum.jpg','britishmuseum_hoa.png','britishmuseum_mummy.jpg'];
+const MUSEUM_CROP_X = 400; // X value to crop museum images
 const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec emperor during the Spanish conquest
   of the early 16th century, this artifact is recognized to have been a symbol of political and religious power in
   ancient Mexico. Its origin and function are disputed, as there exists no known evidence proving that it belonged
@@ -28,7 +29,10 @@ const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec empe
   `A painted casting, holding the mummified remains of a priestess called Tjentmutengebtiu from Egypt’s 21st dynasty.
   This artifact is currently in the British Museum.`];
 const FADE_RATE = 2; // Change in tint per frame
-const ARTIFACT_SIZE = 200; // Width of artifact images
+const LERP_RATE = 0.1; // Rate of interpolation for artifact movement
+const HANDLE_SIZE = 40; // Size of grabbable area around artifact
+const BUTTON_SPACING = 150; // Distance from artifact to buttons
+const BUTTON_SIZE = 30;
 
 // Globals
 let currPos; // Current artifact position
@@ -102,7 +106,7 @@ function setup() {
 
 function button(x, y, t) {
   let result = false;
-  if(abs(mouseX - x) < 20 && abs(mouseY - y) < 30 && !isDragging) {
+  if(abs(mouseX - x) < BUTTON_SIZE && abs(mouseY - y) < BUTTON_SIZE && !isDragging) {
     fill(255);
     cursor(HAND);
     if(mouseIsPressed && !mouseDown) {
@@ -142,21 +146,19 @@ function draw() {
   }
 
   // LEFT SIDE MUSEUM IMAGE //
-  let museumImg = museumImgs[artifactIndex].get(450, 0, width / 2, height);
+  let museumImg = museumImgs[artifactIndex].get(MUSEUM_CROP_X, 0, width / 2, height);
   tint(255, 255);
   image(museumImg, width / 4, height / 2);
 
-  cursor(ARROW);
-
-  // Draw buttons
-  if(button(museumPos.x - 100, museumPos.y, "<<")) {
+  // Button logic for changing artifacts
+  if(button(museumPos.x - BUTTON_SPACING, museumPos.y, "<<")) {
     artifactIndex -= 1;
     if(artifactIndex < 0) {
       artifactIndex = ARTIFACTS.length - 1;
     }
     checkRepatriation();
   }
-  if(button(museumPos.x + 100, museumPos.y, ">>")) {
+  if(button(museumPos.x + BUTTON_SPACING, museumPos.y, ">>")) {
     artifactIndex += 1;
     if(artifactIndex >= ARTIFACTS.length) {
       artifactIndex = 0;
@@ -165,12 +167,12 @@ function draw() {
   }
 
   // Drag logic for artifact
-  if (abs(mouseX - currPos.x) < 40 && abs(mouseY - currPos.y) < 40) {
+  if (abs(mouseX - currPos.x) < HANDLE_SIZE && abs(mouseY - currPos.y) < HANDLE_SIZE) {
     if (mouseIsPressed) {
       isDragging = true;
     }
     cursor(HAND);
-  }
+  } else cursor(ARROW);
 
   if (!mouseIsPressed) {
     isDragging = false;
@@ -191,7 +193,22 @@ function draw() {
     }
   }
 
-  // Artifact shine effect
+  drawShineEffect();
+  drawDescription();
+  drawArtifact();
+}
+
+function checkRepatriation() {
+  if (ARTIFACTS[artifactIndex].repatriated) {
+    currPos = createVector(homelandPos.x, homelandPos.y);
+    goalPos = createVector(homelandPos.x, homelandPos.y);
+  } else {
+    currPos = createVector(museumPos.x, museumPos.y);
+    goalPos = createVector(museumPos.x, museumPos.y);
+  }
+}
+
+function drawShineEffect() {
   let r = constrain((currPos.x - (width / 4)) / (width / 2), 0, 1);
   fill(255, 255, 255, floor(r * 50));
   noStroke();
@@ -203,8 +220,9 @@ function draw() {
     triangle(0, 0, floor(r * -200), 1000, floor(r * 200), 1000);
   }
   pop();
+}
 
-  // Draw description
+function drawDescription() {
   fill(0, 0, 0, 128);
   noStroke();
   rect(0, museumPos.y + 150, width / 2, height - (museumPos.y + 100));
@@ -213,19 +231,10 @@ function draw() {
   textAlign(LEFT, TOP);
   textSize(14);
   text(DESCRIPTIONS[artifactIndex], 10, museumPos.y + 160, width / 2 - 20);
-
-  // Draw artifact
-  tint(255, 255);
-  currPos = p5.Vector.lerp(currPos, goalPos, 0.1);
-  image(artifactImgs[artifactIndex], currPos.x, currPos.y);
 }
 
-function checkRepatriation() {
-  if (ARTIFACTS[artifactIndex].repatriated) {
-    currPos = createVector(homelandPos.x, homelandPos.y);
-    goalPos = createVector(homelandPos.x, homelandPos.y);
-  } else {
-    currPos = createVector(museumPos.x, museumPos.y);
-    goalPos = createVector(museumPos.x, museumPos.y);
-  }
+function drawArtifact() {
+  tint(255, 255);
+  currPos = p5.Vector.lerp(currPos, goalPos, LERP_RATE);
+  image(artifactImgs[artifactIndex], currPos.x, currPos.y);
 }
