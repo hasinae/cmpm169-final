@@ -31,8 +31,10 @@ const FADE_RATE = 2; // Change in tint per frame
 const ARTIFACT_SIZE = 200; // Width of artifact images
 
 // Globals
-let x;
-let y;
+let currPos; // Current artifact position
+let museumPos;
+let homelandPos;
+let goalPos;
 let canvasContainer;
 let artifactIndex = 0;
 let isDragging = false;
@@ -83,8 +85,10 @@ function setup() {
   resizeScreen();
 
   // Initialize positions
-  x = width / 4;
-  y = height / 2;
+  museumPos = createVector(width / 4, height / 2);
+  homelandPos = createVector(width / 4 * 3, height / 2);
+  currPos = createVector(museumPos.x, museumPos.y);
+  goalPos = createVector(museumPos.x, museumPos.y);
 
   // Resize images to fit the screen
   for (let slideshow of slideshows) {
@@ -118,9 +122,6 @@ function button(x, y, t) {
 function draw() {
   background(255);
 
-  let artifactX = width / 4;
-  let artifactY = height / 2;
-
   // RIGHT SIDE SLIDESHOW //
   let slideshow = slideshows[artifactIndex];
   // -- Get current and next images
@@ -148,23 +149,23 @@ function draw() {
   cursor(ARROW);
 
   // Draw buttons
-  if(button(artifactX - 100, artifactY, "<<")) {
+  if(button(museumPos.x - 100, museumPos.y, "<<")) {
     artifactIndex -= 1;
     if(artifactIndex < 0) {
       artifactIndex = ARTIFACTS.length - 1;
     }
-    checkRepatriation(artifactX, artifactY);
+    checkRepatriation();
   }
-  if(button(artifactX + 100, artifactY, ">>")) {
+  if(button(museumPos.x + 100, museumPos.y, ">>")) {
     artifactIndex += 1;
     if(artifactIndex >= ARTIFACTS.length) {
       artifactIndex = 0;
     }
-    checkRepatriation(artifactX, artifactY);
+    checkRepatriation();
   }
 
   // Drag logic for artifact
-  if (abs(mouseX - x) < 40 && abs(mouseY - y) < 40) {
+  if (abs(mouseX - currPos.x) < 40 && abs(mouseY - currPos.y) < 40) {
     if (mouseIsPressed) {
       isDragging = true;
     }
@@ -178,25 +179,24 @@ function draw() {
 
   if (isDragging) {
     cursor(HAND);
-    x = mouseX;
-    y = mouseY;
+    currPos = createVector(mouseX, mouseY);
+    goalPos = createVector(mouseX, mouseY);
   } else {
-    if (x < width / 2) {
-      x += ((width / 4) - x) * 0.1;
+    if (currPos.x < width / 2) {
+      goalPos = createVector(museumPos.x, museumPos.y);
       ARTIFACTS[artifactIndex].repatriated = false;
     } else {
-      x += ((width / 4 * 3) - x) * 0.1;
+      goalPos = createVector(homelandPos.x, homelandPos.y);
       ARTIFACTS[artifactIndex].repatriated = true;
     }
-    y += ((height / 2) - y) * 0.1;
   }
 
   // Artifact shine effect
-  let r = constrain((x - (width / 4)) / (width / 2), 0, 1);
+  let r = constrain((currPos.x - (width / 4)) / (width / 2), 0, 1);
   fill(255, 255, 255, floor(r * 50));
   noStroke();
   push();
-  translate(x, y);
+  translate(currPos.x, currPos.y);
   rotate(frameCount * 0.01);
   for (let i = 0; i < 8; i++) {
     rotate(PI * 2 / 8);
@@ -207,24 +207,25 @@ function draw() {
   // Draw description
   fill(0, 0, 0, 128);
   noStroke();
-  rect(0, artifactY + 150, width / 2, height - (artifactY + 100));
+  rect(0, museumPos.y + 150, width / 2, height - (museumPos.y + 100));
   
   fill(255, 255, 255);
   textAlign(LEFT, TOP);
   textSize(14);
-  text(DESCRIPTIONS[artifactIndex], 10, artifactY + 160, width / 2 - 20);
+  text(DESCRIPTIONS[artifactIndex], 10, museumPos.y + 160, width / 2 - 20);
 
   // Draw artifact
   tint(255, 255);
-  image(artifactImgs[artifactIndex], x, y);
+  currPos = p5.Vector.lerp(currPos, goalPos, 0.1);
+  image(artifactImgs[artifactIndex], currPos.x, currPos.y);
 }
 
-function checkRepatriation(artifactX, artifactY) {
+function checkRepatriation() {
   if (ARTIFACTS[artifactIndex].repatriated) {
-    x = width / 4 * 3;
-    y = height / 2;
+    currPos = createVector(homelandPos.x, homelandPos.y);
+    goalPos = createVector(homelandPos.x, homelandPos.y);
   } else {
-    x = artifactX;
-    y = artifactY;
+    currPos = createVector(museumPos.x, museumPos.y);
+    goalPos = createVector(museumPos.x, museumPos.y);
   }
 }
