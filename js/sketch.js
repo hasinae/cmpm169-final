@@ -7,9 +7,9 @@ Instructor: Wes Modes
 */
 
 // Constants
-const ARTIFACTS = [{name: 'moctezuma_headdress', repatriated: false}, 
-                   {name: 'hoa_hakananai_a', repatriated: false}, 
-                   {name: 'tjentmutengebtiu_mummy', repatriated: false}];
+const ARTIFACTS = [{name: 'moctezuma_headdress', size: 200, repatriated: false}, 
+                   {name: 'hoa_hakananai_a', size: 250, repatriated: false}, 
+                   {name: 'tjentmutengebtiu_mummy', size: 500, repatriated: false}];
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
@@ -92,7 +92,7 @@ function setup() {
       if (img.height > img.width) img.resize(width, 0); else img.resize(0, height);
     }
   }
-  for (let img of artifactImgs) img.resize(ARTIFACT_SIZE, 0);
+  for (let artifact of ARTIFACTS) artifactImgs[ARTIFACTS.indexOf(artifact)].resize(artifact.size, 0);
   for (let img of museumImgs) img.resize(0, height);
 }
 
@@ -207,12 +207,12 @@ function draw() {
   // Draw description
   fill(0, 0, 0, 128);
   noStroke();
-  rect(0, artifactY + 100, width / 2, height - (artifactY + 100));
+  rect(0, artifactY + 150, width / 2, height - (artifactY + 100));
   
   fill(255, 255, 255);
   textAlign(LEFT, TOP);
   textSize(14);
-  text(DESCRIPTIONS[artifactIndex], 10, artifactY + 110, width / 2 - 20);
+  text(DESCRIPTIONS[artifactIndex], 10, artifactY + 160, width / 2 - 20);
 
   // Draw artifact
   tint(255, 255);
