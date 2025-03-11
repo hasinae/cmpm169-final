@@ -33,7 +33,8 @@ const LERP_RATE = 0.1; // Rate of interpolation for artifact movement
 const HANDLE_SIZE = 40; // Size of grabbable area around artifact
 const BUTTON_SPACING = 255; // Distance from artifact to buttons
 const BUTTON_SIZE = 50;
-const MAX_MOVE_FREQ = 60; // Maximum # of frames in between random artifact movement
+const MAX_MOVE_FREQ = 20; // Maximum # of frames in between random artifact movement
+const MOVE_DIFF = 200; // Maximum distance artifact can move randomly
 
 // Globals
 let currPos; // Current artifact position
@@ -172,10 +173,10 @@ function draw() {
 
   // Artifact dragging logic
   if (abs(mouseX - currPos.x) < HANDLE_SIZE && abs(mouseY - currPos.y) < HANDLE_SIZE) {
-    if (mouseIsPressed && !isMoving) {
+    if (mouseIsPressed && !isMoving && !ARTIFACTS[artifactIndex].repatriated) {
       isDragging = true;
     }
-    cursor(HAND);
+    if (!ARTIFACTS[artifactIndex].repatriated) cursor(HAND);
   }
 
   if (!mouseIsPressed) {
@@ -190,7 +191,7 @@ function draw() {
     if (moveCounter == 0) {
       isMoving = true;
       isDragging = false;
-      goalPos = createVector(museumPos.x + random(-100, 100), currPos.y + random(-100, 100));
+      goalPos = createVector(museumPos.x + random(-MOVE_DIFF, MOVE_DIFF), currPos.y + random(-MOVE_DIFF, MOVE_DIFF));
     }
     moveCounter--;
   } else if (!isMoving) {
