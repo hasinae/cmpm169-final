@@ -47,6 +47,9 @@ let isDragging = false;
 let isMoving = false;
 let mouseDown = false;
 let moveCounter = 0;
+let artifactOpacity = 255; // opacity of the current artifact
+let isTransitioning = false; // indicates if a transition is happening
+let nextArtifactIndex = artifactIndex; // stores the index of the next artifact
 // -- Images
 let artifactImgs = [];
 let slideshows = [[], [], []];
@@ -156,19 +159,36 @@ function draw() {
   image(museumImg, width / 4, height / 2);
 
   // Button logic for changing artifacts
-  if(button(museumPos.x - BUTTON_SPACING, museumPos.y, "<")) {
-    artifactIndex -= 1;
-    if(artifactIndex < 0) {
-      artifactIndex = ARTIFACTS.length - 1;
+  if (button(museumPos.x - BUTTON_SPACING, museumPos.y, "<")) {
+    if (!isTransitioning) {
+      nextArtifactIndex = artifactIndex - 1;
+      if (nextArtifactIndex < 0) {
+        nextArtifactIndex = ARTIFACTS.length - 1;
+      }
+      isTransitioning = true; // Start the transition
     }
-    checkRepatriation();
   }
-  if(button(museumPos.x + BUTTON_SPACING, museumPos.y, ">")) {
-    artifactIndex += 1;
-    if(artifactIndex >= ARTIFACTS.length) {
-      artifactIndex = 0;
+  if (button(museumPos.x + BUTTON_SPACING, museumPos.y, ">")) {
+    if (!isTransitioning) {
+      nextArtifactIndex = artifactIndex + 1;
+      if (nextArtifactIndex >= ARTIFACTS.length) {
+        nextArtifactIndex = 0;
+      }
+      isTransitioning = true; // Start the transition
     }
-    checkRepatriation();
+  }
+
+  // Fade out current artifact
+  if (isTransitioning) {
+    artifactOpacity -= FADE_RATE; // Decrease opacity
+    if (artifactOpacity <= 0) {
+      artifactOpacity = 0; // Ensure opacity doesn't go below 0
+      artifactIndex = nextArtifactIndex; // Switch to the next artifact
+      checkRepatriation(); // Update positions based on repatriation status
+      isTransitioning = false; // End the transition
+    }
+  } else if (artifactOpacity < 255) {
+    artifactOpacity += FADE_RATE; // Fade in the new artifact
   }
 
   // Artifact dragging logic
@@ -254,7 +274,7 @@ function drawDescription() {
 }
 
 function drawArtifact() {
-  tint(255, 255);
+  tint(255, artifactOpacity); // Apply opacity to the artifact
   currPos = p5.Vector.lerp(currPos, goalPos, LERP_RATE);
   image(artifactImgs[artifactIndex], currPos.x, currPos.y);
 }
