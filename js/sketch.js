@@ -7,9 +7,11 @@ Instructor: Wes Modes
 */
 
 // Constants
-const ARTIFACTS = [{name: 'moctezuma_headdress', size: 200, repatriated: false}, 
-                   {name: 'hoa_hakananai_a', size: 120, repatriated: false}, 
-                   {name: 'tjentmutengebtiu_mummy', size: 500, repatriated: false}];
+const MAP = 'map.jpg';
+const MARKER = 'marker.webp';
+const ARTIFACTS = [{name: 'moctezuma_headdress', size: 200, repatriated: false, museum: 0}, 
+                   {name: 'hoa_hakananai_a', size: 120, repatriated: false, museum: 1}, 
+                   {name: 'tjentmutengebtiu_mummy', size: 500, repatriated: false, museum: 2}];
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
@@ -21,13 +23,18 @@ const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec empe
   to Moctezuma II and it is unclear when and for what purposes it may have been worn. It is made of quetzal and
   other feathers, sewn together with gold detailing, and is currently held in the Weltmuseum (World Museum) in
   Vienna, Austria. Mexico has repeatedly requested the artifact be returned in ongoing repatriation dialogues.`,
+  `A collection of artifacts at the Weltmuseum collected by Rudolf Pöch. During 1870-1921, while Botswana was
+  under British rule, the Austrain Academy of Sciences commissioned his travels where his focus was on collecting
+  data on anthropological research. The museum holds 296 artifcats from this collection, to which to museum has
+  acknowledged was collected unethically.`,
   `A moai statue from Easter Island, created by the Rapa Nui people between the 11th and 12th centuries. The
   statue is carved from basalt and is about 2.5 meters in height. It is distinguishable by the carvings on its
   back, which are associated with the bird man religion. The statue was removed by a British ship's crew in 1868
   and currently resides in the British Museum in London. In 2018, a written request was made for the return of
   Hoa Hakananai'a, and the museum met with representatives of Rapa Nui, but the statue remains on display in London.`,
   `A painted casting, holding the mummified remains of a priestess called Tjentmutengebtiu from Egypt's 21st dynasty.
-  This artifact is currently in the British Museum.`];
+  This artifact is currently in the British Museum.`,
+  ``];
 const FADE_RATE = 2; // Change in tint per frame
 const LERP_RATE = 0.1; // Rate of interpolation for artifact movement
 const HANDLE_SIZE = 40; // Size of grabbable area around artifact
@@ -57,6 +64,13 @@ let museumImgs = [];
 let imgIndex = 0;
 let currImgOpacity = 255;
 let nextImgOpacity = 0;
+let _mapImg;
+let _markerImg;
+let markerPos = [[]];
+let markerLabels = ['test', 'Weltmuseum', 'British Museum', 'Tower of London'];
+let currMuseum;
+let atMuseum = false;
+
 
 function preload() {
   for (let i = 0; i < ARTIFACTS.length; i++) {
@@ -77,6 +91,11 @@ function preload() {
     let museumImg = loadImage('assets/museum_images/' + museumName);
     museumImgs.push(museumImg);
   }
+  _mapImg = loadImage('assets/' + MAP);
+  _markerImg = loadImage('assets/' + MARKER);
+  markerPos.push([645, 140]);
+  markerPos.push([580, 120]);
+  markerPos.push([595, 130]);
 }
 
 function resizeScreen() {
@@ -133,6 +152,22 @@ function button(x, y, t) {
 function draw() {
   background(255);
   cursor(ARROW);
+  
+  if(currMuseum != null) {
+    if(currMuseum == 0) {
+      // only show Weltmuseum artifacts, museum: 0
+      if(artifactIndex != 0) {
+        artficatIndex = 0;
+        imgIndex = 0;
+      }
+    } else if(currMuseum == 1) {
+      // only show British Museum artifacts, museum: 1
+      if(artifactIndex > 2 || artifactIndex < 1) {
+        artficatIndex = 1;
+        imgIndex = 1;
+      }
+    }
+  }
 
   // RIGHT SIDE SLIDESHOW //
   let slideshow = slideshows[artifactIndex];
@@ -157,7 +192,7 @@ function draw() {
   let museumImg = museumImgs[artifactIndex].get(MUSEUM_CROP_X, 0, width / 2, height);
   tint(255, 255);
   image(museumImg, width / 4, height / 2);
-
+  
   // Button logic for changing artifacts
   if (button(museumPos.x - BUTTON_SPACING, museumPos.y, "<")) {
     if (!isTransitioning) {
@@ -236,6 +271,43 @@ function draw() {
   drawShineEffect();
   drawDescription();
   drawArtifact();
+
+  // Add in map, fade out when location is picked, the load in the artifact from that location
+  if(!atMuseum){
+    image(_mapImg, 600, 400, width, height);
+    placeMarker();
+  }else{
+    // add button to go back to map
+    if(button(1000, 700, "Back to Map")) {
+      atMuseum = false;
+    }
+  }
+}
+
+function placeMarker() {
+  for(let i = 0; i < markerPos.length; i++) {
+    image(_markerImg, markerPos[i][0], markerPos[i][1], 50, 50);
+  }
+
+  // when you hover over marker, create buttons to select location
+  for(let i = 0; i < markerPos.length; i++) {
+    if(abs(mouseX - markerPos[i][0]) < 25 && abs(mouseY - markerPos[i][1]) < 25) {
+      fill(255);
+      cursor(HAND);
+      stroke(0);
+      textAlign(CENTER, CENTER);
+      textSize(20);
+      text(markerLabels[i], markerPos[i][0], markerPos[i][1] + 30);
+      if(mouseIsPressed && !mouseDown) {
+        if (!isTransitioning) {
+          currMuseum = i;
+          atMuseum = true;
+        }
+      }
+    } else {
+      fill(200);
+    }
+  }
 }
 
 function checkRepatriation() {
