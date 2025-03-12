@@ -42,7 +42,7 @@ const LERP_RATE = 0.1; // Rate of interpolation for artifact movement
 const HANDLE_SIZE = 40; // Size of grabbable area around artifact
 const BUTTON_SPACING = 255; // Distance from artifact to buttons
 const BUTTON_SIZE = 50;
-const MAX_MOVE_FREQ = 20; // Maximum # of frames in between random artifact movement
+const MAX_MOVE_FREQ = 60; // Maximum # of frames in between random artifact movement
 const MOVE_DIFF = 200; // Maximum distance artifact can move randomly
 
 // Globals
