@@ -69,6 +69,8 @@ let nextImgOpacity = 0;
 let _mapImg;
 let _markerImg;
 let markerPos = [[]];
+let artifactPos = [[]];
+let repatArtifacts = [[]];
 let markerLabels = ['test', 'Weltmuseum', 'British Museum', 'Tower of London'];
 let currMuseum;
 let atMuseum = false;
@@ -98,6 +100,10 @@ function preload() {
   markerPos.push([645, 140]);
   markerPos.push([580, 120]);
   markerPos.push([595, 130]);
+  artifactPos.push([260, 270]);// mexico
+  artifactPos.push([675, 480]);// botswana
+  artifactPos.push([220, 500]);// easter island
+  artifactPos.push([700, 250]);// egypt
 }
 
 function resizeScreen() {
@@ -159,6 +165,7 @@ function draw() {
   // Add in map, fade out when location is picked, the load in the artifact from that location
   if(!atMuseum){
     image(_mapImg, 600, 400, width, height);
+    placeArtifacts();
     placeMarker();
   }else{
     handleArtifact();
@@ -271,9 +278,11 @@ function handleArtifact() {
     if (currPos.x < width / 2) {
       goalPos = createVector(museumPos.x, museumPos.y);
       ARTIFACTS[artifactIndex].repatriated = false;
+      repatArtifacts.splice(artifactIndex, 1);
     } else {
       goalPos = createVector(homelandPos.x, homelandPos.y);
       ARTIFACTS[artifactIndex].repatriated = true;
+      repatArtifacts.push(artifactImgs[artifactIndex]);
     }
   }
 
@@ -319,6 +328,12 @@ function placeMarker() {
     }
   }
 }
+
+function placeArtifacts() {
+  repatArtifacts.forEach((img, i) => {
+    image(img, artifactPos[i][0], artifactPos[i][1]);
+  });
+} 
 
 function checkRepatriation() {
   if (ARTIFACTS[artifactIndex].repatriated) {
