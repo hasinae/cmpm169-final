@@ -9,13 +9,15 @@ Instructor: Wes Modes
 // Constants
 const MAP = 'map.jpg';
 const MARKER = 'marker.webp';
-const ARTIFACTS = [{name: 'moctezuma_headdress', size: 200, repatriated: false, museum: 0}, 
+const ARTIFACTS = [{name: 'moctezuma_headdress', size: 200, repatriated: false, museum: 0},
+                   {name: 'Pöch_Collection', size: 600, repatriated: false, museum: 0}, 
                    {name: 'hoa_hakananai_a', size: 120, repatriated: false, museum: 1}, 
-                   {name: 'tjentmutengebtiu_mummy', size: 500, repatriated: false, museum: 2}];
+                   {name: 'tjentmutengebtiu_mummy', size: 500, repatriated: false, museum: 1}];
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
+                             ['botswana_1.jpg', 'botswana_2.jpg', 'botswana_3.jpg', 'botswana_4.jpg'],
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
-const MUSEUM_IMG = ['weltmuseum.jpg','britishmuseum_hoa.png','britishmuseum_mummy.jpg'];
+const MUSEUM_IMG = ['weltmuseum.jpg','weltmuseum_posh.jpg','britishmuseum_hoa.png','britishmuseum_mummy.jpg'];
 const MUSEUM_CROP_X = 400; // X value to crop museum images
 const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec emperor during the Spanish conquest
   of the early 16th century, this artifact is recognized to have been a symbol of political and religious power in
@@ -59,7 +61,7 @@ let isTransitioning = false; // indicates if a transition is happening
 let nextArtifactIndex = artifactIndex; // stores the index of the next artifact
 // -- Images
 let artifactImgs = [];
-let slideshows = [[], [], []];
+let slideshows = [[], [], [], []];
 let museumImgs = [];
 let imgIndex = 0;
 let currImgOpacity = 255;
@@ -153,22 +155,38 @@ function draw() {
   background(255);
   cursor(ARROW);
   
-  if(currMuseum != null) {
-    if(currMuseum == 0) {
-      // only show Weltmuseum artifacts, museum: 0
-      if(artifactIndex != 0) {
-        artficatIndex = 0;
-        imgIndex = 0;
-      }
-    } else if(currMuseum == 1) {
-      // only show British Museum artifacts, museum: 1
-      if(artifactIndex > 2 || artifactIndex < 1) {
-        artficatIndex = 1;
-        imgIndex = 1;
-      }
+  handleArtifact();
+  // Add in map, fade out when location is picked, the load in the artifact from that location
+  if(!atMuseum){
+    image(_mapImg, 600, 400, width, height);
+    placeMarker();
+  }else{
+    handleArtifact();
+    drawShineEffect();
+    drawDescription();
+    drawArtifact();
+    // add button to go back to map
+    if(button(1000, 700, "Back to Map")) {
+      atMuseum = false;
     }
   }
+}
 
+function handleArtifact() {
+  if(currMuseum == 1){
+    // Weltmuseum
+    if(artifactIndex > 1 || artifactIndex < 0) {
+      artifactIndex = 0;
+      imgIndex = 0;
+    }
+    
+  } else if(currMuseum == 2) {
+    // British Museum
+    if(artifactIndex < 2) {
+      artifactIndex = 2;
+      imgIndex = 2;
+    }
+  }
   // RIGHT SIDE SLIDESHOW //
   let slideshow = slideshows[artifactIndex];
   // -- Get current and next images
@@ -267,21 +285,6 @@ function draw() {
       isMoving = false;
     }
   }
-
-  drawShineEffect();
-  drawDescription();
-  drawArtifact();
-
-  // Add in map, fade out when location is picked, the load in the artifact from that location
-  if(!atMuseum){
-    image(_mapImg, 600, 400, width, height);
-    placeMarker();
-  }else{
-    // add button to go back to map
-    if(button(1000, 700, "Back to Map")) {
-      atMuseum = false;
-    }
-  }
 }
 
 function placeMarker() {
@@ -301,6 +304,13 @@ function placeMarker() {
       if(mouseIsPressed && !mouseDown) {
         if (!isTransitioning) {
           currMuseum = i;
+          if(i == 1) {
+            nextArtifactIndex = 0;
+            imgIndex = 0;
+          }else if(i == 2) {
+            nextArtifactIndex = 1;
+            imgIndex = 1;
+          }
           atMuseum = true;
         }
       }
@@ -346,6 +356,23 @@ function drawDescription() {
 }
 
 function drawArtifact() {
+  if(currMuseum != null) {
+    if(currMuseum == 1) {
+      // only show Weltmuseum artifacts, museum: 0
+      if(nextArtifactIndex != 0) {
+        nextArtficatIndex = 0;
+        imgIndex = 1;
+      }
+    } else if(currMuseum == 2) {
+      // only show British Museum artifacts, museum: 1
+      if(nextArtifactIndex > 2 || nextArtifactIndex < 1) {
+        nextArtficatIndex = 1;
+        imgIndex = 2;
+      }
+    }
+  }
+
+
   tint(255, artifactOpacity); // Apply opacity to the artifact
   currPos = p5.Vector.lerp(currPos, goalPos, LERP_RATE);
   image(artifactImgs[artifactIndex], currPos.x, currPos.y);
