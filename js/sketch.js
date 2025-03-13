@@ -18,6 +18,13 @@ const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dr
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
                              ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
 const MUSEUM_IMG = ['weltmuseum.jpg','weltmuseum_posh.jpg','britishmuseum_hoa.png','britishmuseum_mummy.jpg'];
+const HOMELAND_MUSIC = ['aztec_music.mp3', 'botswana_music.mp3', 'rapa_nui_music.mp3', 'egypt_music.mp3'];
+/* music sources: 
+aztec_music: Jimena Contreras - Aztec Empire
+botswana_music: Captain Dira-Machobane ( Botswana )
+rapa_nui_music: Easter Island Folk Song - "Reo Topa"
+egypt_music: Royalty free Ancient Egypt Music 2 | Desert Fantasy Cleopatra | WOW Sound
+*/
 const MUSEUM_CROP_X = 400; // X value to crop museum images
 const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec emperor during the Spanish conquest
   of the early 16th century, this artifact is recognized to have been a symbol of political and religious power in
@@ -74,6 +81,8 @@ let repatArtifacts = [[]];
 let markerLabels = ['test', 'Weltmuseum', 'British Museum', 'Tower of London'];
 let currMuseum;
 let atMuseum = false;
+// music
+let homelandMusic = [];
 
 
 function preload() {
@@ -95,6 +104,19 @@ function preload() {
     let museumImg = loadImage('assets/museum_images/' + museumName);
     museumImgs.push(museumImg);
   }
+
+  // let homelandMusic = [];
+
+  // load music
+  for (let i = 0; i < ARTIFACTS.length; i++) {
+    let path = 'assets/' + HOMELAND_MUSIC[i];
+    let homelandSound = loadSound(path, 
+        // () => console.log(`Loaded: ${path}`),
+        // () => console.error(`Failed to load: ${path}`)
+    );
+    homelandMusic.push(homelandSound);
+}
+
   _mapImg = loadImage('assets/' + MAP);
   _markerImg = loadImage('assets/' + MARKER);
   markerPos.push([645, 140]);
@@ -288,11 +310,20 @@ function handleArtifact() {
 
   if (isMoving) {
     cursor(ARROW);
-    console.log("Moving. currPos: " + currPos + " goalPos: " + goalPos);
+    // console.log("Moving. currPos: " + currPos + " goalPos: " + goalPos);
     if (currPos.dist(goalPos) < 1) {
       moveCounter = round(random(0, MAX_MOVE_FREQ));
       isMoving = false;
     }
+  }
+
+  // handle music
+  let distToHomeland = dist(currPos.x, currPos.y, homelandPos.x, homelandPos.y);
+  let maxDist = width / 2; 
+  let volume = map(distToHomeland, maxDist, 0, 0, 1);
+  homelandMusic[artifactIndex].setVolume(volume);
+  if (!homelandMusic[artifactIndex].isPlaying()) {
+    homelandMusic[artifactIndex].loop();
   }
 }
 
