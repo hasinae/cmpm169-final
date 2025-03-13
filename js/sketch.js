@@ -12,13 +12,17 @@ const MARKER = 'marker.webp';
 const ARTIFACTS = [{name: 'moctezuma_headdress', size: 200, repatriated: false, museum: 0},
                    {name: 'Pöch_Collection', size: 600, repatriated: false, museum: 0}, 
                    {name: 'hoa_hakananai_a', size: 120, repatriated: false, museum: 1}, 
-                   {name: 'tjentmutengebtiu_mummy', size: 500, repatriated: false, museum: 1}];
+                   {name: 'tjentmutengebtiu_mummy', size: 500, repatriated: false, museum: 1},
+                   {name: 'kohinoor', size: 200, repatriated: false, museum: 2},
+                   {name: 'Cullinan_Diamond', size: 200, repatriated: false, museum: 2}];
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
                              ['botswana_1.jpg', 'botswana_2.jpg', 'botswana_3.jpg', 'botswana_4.jpg'],
                              ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
-                             ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg']];
-const MUSEUM_IMG = ['weltmuseum.jpg','weltmuseum_posh.jpg','britishmuseum_hoa.png','britishmuseum_mummy.jpg'];
-const HOMELAND_MUSIC = ['aztec_music.mp3', 'botswana_music.mp3', 'rapa_nui_music.mp3', 'egypt_music.mp3'];
+                             ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg'],
+                             ['kohinoor_1.webp', 'kohinoor_2.jpg', 'kohinoor_3.webp', 'kohinoor_4.webp'],
+                             ['cullinan_1.jpg', 'cullinan_2.jpg', 'cullinan_3.jpg', 'cullinan_4.jpg']];
+const MUSEUM_IMG = ['weltmuseum.jpg','weltmuseum_posh.jpg','britishmuseum_hoa.png','britishmuseum_mummy.jpg', 'toweroflondon_kohinoor.png', 'toweroflondon_cullinan.png'];
+const HOMELAND_MUSIC = ['aztec_music.mp3', 'botswana_music.mp3', 'rapa_nui_music.mp3', 'egypt_music.mp3', 'southindian_music.mp3', 'southafrican_music.mp3'];
 /* music sources: 
 aztec_music: Jimena Contreras - Aztec Empire
 botswana_music: Captain Dira-Machobane ( Botswana )
@@ -43,7 +47,16 @@ const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec empe
   Hoa Hakananai'a, and the museum met with representatives of Rapa Nui, but the statue remains on display in London.`,
   `A painted casting, holding the mummified remains of a priestess called Tjentmutengebtiu from Egypt's 21st dynasty.
   This artifact is currently in the British Museum.`,
-  ``];
+  `The history of this diamond hasn’t been well documented, with many sources differing in the origin of the gem.
+  However, it is believed to have originated from the Golconda mines in central southern India. It is a symbol of conquest and power, 
+  and some of its previous owners included Mughal Emperors, Shahs of Iran, and Emirs of Afghanistan. 
+  In 1849, the East India Company took the jewel from Maharaja Duleep Singh as part of the Treaty of Lahore to be surrendered to Queen Victoria. 
+  The diamond weighs 105.6 carats but was larger before it was recut in 1852 to fit European aesthetics.`,
+  `Discovered in South Africa in 1905 and named after the mine’s chairman, Sir Thomas Cullinan. Since its discovery, 
+  it has remained the largest gem-quality uncut diamond in the world at 3106 carats. The rough stone was gifted to King Edward VII in 1907 
+  and cut into nine major diamonds named Cullinan I through IX. Also known as the Great Star of Africa, Cullinan I weighs more than 530 carats 
+  and is mounted on the Sovereign’s Scepter as part of the British royal family’s priceless crown jewels. Activists in South Africa have called
+  for the diamond’s return, arguing that the diamond was stolen during the colonial era and not gifted.`];
 const FADE_RATE = 2; // Change in tint per frame
 const LERP_RATE = 0.1; // Rate of interpolation for artifact movement
 const HANDLE_SIZE = 40; // Size of grabbable area around artifact
@@ -68,7 +81,7 @@ let isTransitioning = false; // indicates if a transition is happening
 let nextArtifactIndex = artifactIndex; // stores the index of the next artifact
 // -- Images
 let artifactImgs = [];
-let slideshows = [[], [], [], []];
+let slideshows = [[], [], [], [], [], []];
 let museumImgs = [];
 let imgIndex = 0;
 let currImgOpacity = 255;
@@ -213,6 +226,11 @@ function handleArtifact() {
     if(artifactIndex < 2) {
       artifactIndex = 2;
     }
+  } else if(currMuseum == 3) {
+    // Tower of London
+    if(artifactIndex < 4) {
+      artifactIndex = 4;
+    }
   }
   // RIGHT SIDE SLIDESHOW //
   let slideshow = slideshows[artifactIndex];
@@ -346,6 +364,8 @@ function placeMarker() {
             nextArtifactIndex = 0;
           }else if(i == 2) {
             nextArtifactIndex = 1;
+          }else if (i == 3) {
+            nextArtifactIndex = 4;
           }
           atMuseum = true;
         }
@@ -408,6 +428,11 @@ function drawArtifact() {
       // only show British Museum artifacts, museum: 1
       if(nextArtifactIndex > 2 || nextArtifactIndex < 1) {
         nextArtficatIndex = 1;
+      }
+    } else if(currMuseum == 3) {
+      // only show Tower of London artifacts, museum: 2
+      if(nextArtifactIndex < 4) {
+        nextArtficatIndex = 4;
       }
     }
   }
