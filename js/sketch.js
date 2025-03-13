@@ -187,7 +187,7 @@ function draw() {
   // Add in map, fade out when location is picked, the load in the artifact from that location
   if(!atMuseum){
     image(_mapImg, 600, 400, width, height);
-    placeArtifacts();
+    //placeArtifacts();
     placeMarker();
   }else{
     handleArtifact();
@@ -206,14 +206,12 @@ function handleArtifact() {
     // Weltmuseum
     if(artifactIndex > 1 || artifactIndex < 0) {
       artifactIndex = 0;
-      imgIndex = 0;
     }
     
   } else if(currMuseum == 2) {
     // British Museum
     if(artifactIndex < 2) {
       artifactIndex = 2;
-      imgIndex = 2;
     }
   }
   // RIGHT SIDE SLIDESHOW //
@@ -346,10 +344,8 @@ function placeMarker() {
           currMuseum = i;
           if(i == 1) {
             nextArtifactIndex = 0;
-            imgIndex = 0;
           }else if(i == 2) {
             nextArtifactIndex = 1;
-            imgIndex = 1;
           }
           atMuseum = true;
         }
@@ -407,13 +403,11 @@ function drawArtifact() {
       // only show Weltmuseum artifacts, museum: 0
       if(nextArtifactIndex != 0) {
         nextArtficatIndex = 0;
-        imgIndex = 1;
       }
     } else if(currMuseum == 2) {
       // only show British Museum artifacts, museum: 1
       if(nextArtifactIndex > 2 || nextArtifactIndex < 1) {
         nextArtficatIndex = 1;
-        imgIndex = 2;
       }
     }
   }
