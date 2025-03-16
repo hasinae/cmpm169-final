@@ -213,7 +213,7 @@ function draw() {
 function handleArtifact() {
   if(currMuseum == 1){
     // Weltmuseum
-    if(artifactIndex > 1 || artifactIndex < 0) {
+    if(artifactIndex > 1) {
       artifactIndex = 0;
     }
   } else if(currMuseum == 2) {
@@ -331,6 +331,7 @@ function handleArtifact() {
   let distToHomeland = dist(currPos.x, currPos.y, homelandPos.x, homelandPos.y);
   let maxDist = width / 2; 
   let volume = map(distToHomeland, maxDist, 0, 0, 1);
+  for (let music of homelandMusic) music.setVolume(0);
   homelandMusic[artifactIndex].setVolume(volume);
   if (!homelandMusic[artifactIndex].isPlaying()) {
     homelandMusic[artifactIndex].loop();
