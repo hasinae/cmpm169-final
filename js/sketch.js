@@ -58,10 +58,11 @@ const DESCRIPTIONS = [`Believed to have belonged to Moctezuma II, the Aztec empe
   and is mounted on the Sovereign’s Scepter as part of the British royal family’s priceless crown jewels. Activists in South Africa have called
   for the diamond’s return, arguing that the diamond was stolen during the colonial era and not gifted.`];
 const FADE_RATE = 2; // Change in tint per frame
-const LERP_RATE = 0.1; // Rate of interpolation for artifact movement
+const LERP_RATE = 0.05; // Rate of interpolation for artifact movement
 const HANDLE_SIZE = 40; // Size of grabbable area around artifact
 const BUTTON_SPACING = 255; // Distance from artifact to buttons
 const BUTTON_SIZE = 50;
+const MIN_MOVE_FREQ = 30; // Minimum # of frames in between random artifact movement 
 const MAX_MOVE_FREQ = 60; // Maximum # of frames in between random artifact movement
 const MOVE_DIFF = 200; // Maximum distance artifact can move randomly
 
@@ -75,7 +76,7 @@ let artifactIndex = 0;
 let isDragging = false;
 let isMoving = false;
 let mouseDown = false;
-let moveCounter = 0;
+let moveCounter = MAX_MOVE_FREQ;
 let artifactOpacity = 255; // opacity of the current artifact
 let isTransitioning = false; // indicates if a transition is happening
 let nextArtifactIndex = artifactIndex; // stores the index of the next artifact
@@ -118,15 +119,10 @@ function preload() {
     museumImgs.push(museumImg);
   }
 
-  // let homelandMusic = [];
-
   // load music
   for (let i = 0; i < ARTIFACTS.length; i++) {
     let path = 'assets/' + HOMELAND_MUSIC[i];
-    let homelandSound = loadSound(path, 
-        // () => console.log(`Loaded: ${path}`),
-        // () => console.error(`Failed to load: ${path}`)
-    );
+    let homelandSound = loadSound(path);
     homelandMusic.push(homelandSound);
 }
 
@@ -220,7 +216,6 @@ function handleArtifact() {
     if(artifactIndex > 1 || artifactIndex < 0) {
       artifactIndex = 0;
     }
-    
   } else if(currMuseum == 2) {
     // British Museum
     if(artifactIndex < 2) {
@@ -326,9 +321,8 @@ function handleArtifact() {
 
   if (isMoving) {
     cursor(ARROW);
-    // console.log("Moving. currPos: " + currPos + " goalPos: " + goalPos);
     if (currPos.dist(goalPos) < 1) {
-      moveCounter = round(random(0, MAX_MOVE_FREQ));
+      moveCounter = round(random(MIN_MOVE_FREQ, MAX_MOVE_FREQ));
       isMoving = false;
     }
   }
