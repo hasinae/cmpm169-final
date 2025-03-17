@@ -43,29 +43,25 @@ function preload() {
     artifactData = loadJSON('/artifactData.json');
 
     for (let i = 0; i < ARTIFACT_NAMES.length; i++) {
-        // Load artifact image and add to corresponding artifact object
+        // Load artifact image and add to corresponding array
         let artifactName = ARTIFACT_NAMES[i];
         let img = loadImage('assets/' + artifactName + '/artifact.png');
         artifactImgs.push(img);
 
-        // Load slideshow images and add to corresponding artifact object slideshow array
+        // Load slideshow images and add to corresponding array
         let imgNames = SLIDESHOW_IMG_NAMES[i];
         for (let imgName of imgNames) {
             let img = loadImage('assets/' + artifactName + '/slideshow/' + imgName);
             slideshows[i].push(img);
         }
 
-        // Load museum image and add to corresponding artifact object
-        let museumName = MUSEUM_IMG[i];
-        let museumImg = loadImage('assets/museum_images/' + museumName);
+        // Load museum image and add to corresponding array
+        let museumImg = loadImage('assets/' + artifactName + '/museum.jpg');
         museumImgs.push(museumImg);
-    }
 
-    // Load music
-    for (let i = 0; i < ARTIFACT_NAMES.length; i++) {
-        let path = 'assets/' + HOMELAND_MUSIC[i];
-        let homelandSound = loadSound(path);
-        homelandMusic.push(homelandSound);
+        // Load music and add to homeland music array
+        let music = loadSound('assets/' + artifactName + '/music.mp3');
+        homelandMusic.push(music);
     }
 
     _mapImg = loadImage('assets/' + MAP);
@@ -369,7 +365,7 @@ class Artifact {
         // Title
         stroke(0);
         strokeWeight(3);
-        textSize(48);
+        textSize(42);
         textAlign(CENTER, CENTER);
         text(this.name, width / 4, 70);
 

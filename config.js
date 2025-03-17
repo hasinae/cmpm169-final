@@ -11,8 +11,6 @@ const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dr
 ['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg'],
 ['kohinoor_1.webp', 'kohinoor_2.jpg', 'kohinoor_3.webp', 'kohinoor_4.webp'],
 ['cullinan_1.jpg', 'cullinan_2.jpg', 'cullinan_3.jpg', 'cullinan_4.jpg']];
-const MUSEUM_IMG = ['weltmuseum.jpg', 'weltmuseum_posh.jpg', 'britishmuseum_hoa.png', 'britishmuseum_mummy.jpg', 'toweroflondon_kohinoor.png', 'toweroflondon_cullinan.png'];
-const HOMELAND_MUSIC = ['aztec_music.mp3', 'botswana_music.mp3', 'rapa_nui_music.mp3', 'egypt_music.mp3', 'southindian_music.mp3', 'southafrican_music.mp3'];
 /* music sources: 
 aztec_music: Jimena Contreras - Aztec Empire
 botswana_music: Captain Dira-Machobane ( Botswana )
