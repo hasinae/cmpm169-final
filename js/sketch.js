@@ -42,6 +42,7 @@ let currPos; // Current artifact position
 let museumPos;
 let homelandPos;
 let goalPos;
+let artifactMapPositions = [];
 let canvasContainer;
 let isDragging = false;
 let isMoving = false;
@@ -125,6 +126,12 @@ function setup() {
     homelandPos = createVector(width / 4 * 3, height / 2);
     currPos = createVector(museumPos.x, museumPos.y);
     goalPos = createVector(museumPos.x, museumPos.y);
+    artifactMapPositions.push([260, 270]);   // Mexico
+    artifactMapPositions.push([675, 480]);   // Botswana
+    artifactMapPositions.push([220, 500]);   // Easter Island
+    artifactMapPositions.push([700, 250]);   // Egypt
+    artifactMapPositions.push([860, 320]);   // Central Southern India
+    artifactMapPositions.push([680, 550]);   // South Africa
 
     // Create artifact objects
     for (let assetName of ARTIFACT_NAMES) artifacts.push(new Artifact(assetName));
@@ -174,6 +181,7 @@ function draw() {
     if (!atMuseum) {
         tint(255, 255);
         image(_mapImg, 600, 400, width, height);
+        placeArtifacts();
         placeMarker();
     } else {
         currArtifact.draw();
@@ -186,6 +194,18 @@ function draw() {
             turnMusicOff();
             atMuseum = false;
             mouseDown = false;
+        }
+    }
+}
+
+function placeArtifacts() {
+    for (let artifact of artifacts) {
+        if (artifact.repatriated) {
+            console.log("drawing " + artifact.name);
+            let i = artifacts.indexOf(artifact);
+            let artifactMapImg = artifact.img.get();
+            artifactMapImg.resize(artifact.size / 2, 0);
+            image(artifactMapImg, artifactMapPositions[i][0], artifactMapPositions[i][1]);
         }
     }
 }
