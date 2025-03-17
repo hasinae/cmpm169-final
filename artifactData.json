@@ -17,10 +17,10 @@
         "description": "A moai statue from Easter Island, created by the Rapa Nui people between the 11th and 12th centuries. The statue is carved from basalt and is about 2.5 meters in height. It is distinguishable by the carvings on its back, which are associated with the bird man religion. The statue was removed by a British ship's crew in 1868 and currently resides in the British Museum in London. In 2018, a written request was made for the return of Hoa Hakananai'a, and the museum met with representatives of Rapa Nui, but the statue remains on display in London.",
         "size": 120
     },
-    "tjentmutengebtiu_mummy": {
-        "asset_name": "tjentmutengebtiu_mummy",
-        "name": "Mummy of Tjentmutengebtiu",
-        "description": "A painted casting, holding the mummified remains of a priestess called Tjentmutengebtiu from Egypt's 21st dynasty. This artifact is currently in the British Museum.",
+    "tayesmutengebtiu_mummy": {
+        "asset_name": "tayesmutengebtiu_mummy",
+        "name": "Mummy of Tayesmutengebtiu",
+        "description": "A painted casting, holding the mummified remains of a priestess called Tayesmutengebtiu, Tamut, or Tjentmutengebtiu from Egypt's 22nd dynasty. Originally found in Thebes, Egypt, her mummified remains were purchased by the British Museum from an excavator in 1890. Tayesmutengebtiu was an adult woman of high status, estimated to have been between 35-49 years old when she died. Egypt has requested other mummies and mummified remains be repatriated, but Tayesmutengebtiu currently resides in the British Museum.",
         "size": 500
     },
     "kohinoor": {

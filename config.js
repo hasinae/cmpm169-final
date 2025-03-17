@@ -4,7 +4,7 @@ Constants for the main program
 
 const MAP = 'map.jpg';
 const MARKER = 'marker.webp';
-const ARTIFACT_NAMES = ['moctezuma_headdress', 'Pöch_Collection', 'hoa_hakananai_a', 'tjentmutengebtiu_mummy', 'kohinoor', 'Cullinan_Diamond'];
+const ARTIFACT_NAMES = ['moctezuma_headdress', 'Pöch_Collection', 'hoa_hakananai_a', 'tayesmutengebtiu_mummy', 'kohinoor', 'Cullinan_Diamond'];
 const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
 ['botswana_1.jpg', 'botswana_2.jpg', 'botswana_3.jpg', 'botswana_4.jpg'],
 ['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
