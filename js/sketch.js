@@ -176,12 +176,11 @@ function draw() {
         image(_mapImg, 600, 400, width, height);
         placeMarker();
     } else {
-        drawImages();
+        currArtifact.draw();
         handleButtons();
         handleArtifactTransition();
         handleArtifactDragging();
         handleMusic();
-        currArtifact.draw();
         // Add button to go back to map
         if (button(1000, 700, "Back to Map") && !isTransitioning) {
             turnMusicOff();
@@ -189,32 +188,6 @@ function draw() {
             mouseDown = false;
         }
     }
-}
-
-function drawImages() {
-    // -- RIGHT SIDE SLIDESHOW -- //
-    let slideshow = currArtifact.slideshow;
-    // Get current and next images
-    let currImg = slideshow[imgIndex];
-    let nextImg = slideshow[(imgIndex + 1) % slideshow.length]; // Modulo allows for easy looping through image array
-    // Draw each image with their respective opacity value
-    tint(255, currImgOpacity);
-    image(currImg, width / 2 + width / 4, height / 2);
-    tint(255, nextImgOpacity);
-    image(nextImg, width / 2 + width / 4, height / 2);
-    // Decrease the current image's opacity and increase the next images opacity until they have completely faded in/out
-    currImgOpacity -= SLIDESHOW_FADE_RATE;
-    nextImgOpacity += SLIDESHOW_FADE_RATE;
-    if (currImgOpacity <= 0) {
-        imgIndex = (imgIndex + 1) % slideshow.length;
-        currImgOpacity = 255;
-        nextImgOpacity = 0;
-    }
-
-    // -- LEFT SIDE MUSEUM IMAGE -- //
-    let museumImg = currArtifact.bg.get(MUSEUM_CROP_X, 0, width / 2, height);
-    tint(255, 255);
-    image(museumImg, width / 4, height / 2);
 }
 
 function handleButtons() {
@@ -330,13 +303,13 @@ function placeMarker() {
                 mouseDown = true;
                 switch (i) {
                     case 0:
-                        currArtifacts = [artifacts[0], artifacts[1]];
+                        currArtifacts = [artifacts[0], artifacts[1]]; // Weltmuseum
                         break;
                     case 1:
-                        currArtifacts = [artifacts[2], artifacts[3]];
+                        currArtifacts = [artifacts[2], artifacts[3]]; // British Museum
                         break;
                     case 2:
-                        currArtifacts = [artifacts[4], artifacts[5]];
+                        currArtifacts = [artifacts[4], artifacts[5]]; // Tower of London
                         break;
                 }
                 currArtifact = currArtifacts[0];
@@ -372,6 +345,30 @@ class Artifact {
     }
 
     draw() {
+        // Right side slideshow
+        let slideshow = this.slideshow;
+        // Get current and next images
+        let currImg = slideshow[imgIndex];
+        let nextImg = slideshow[(imgIndex + 1) % slideshow.length]; // Modulo allows for easy looping through image array
+        // Draw each image with their respective opacity value
+        tint(255, currImgOpacity);
+        image(currImg, width / 2 + width / 4, height / 2);
+        tint(255, nextImgOpacity);
+        image(nextImg, width / 2 + width / 4, height / 2);
+        // Decrease the current image's opacity and increase the next images opacity until they have completely faded in/out
+        currImgOpacity -= SLIDESHOW_FADE_RATE;
+        nextImgOpacity += SLIDESHOW_FADE_RATE;
+        if (currImgOpacity <= 0) {
+            imgIndex = (imgIndex + 1) % slideshow.length;
+            currImgOpacity = 255;
+            nextImgOpacity = 0;
+        }
+
+        // Left side museum image
+        let museumImg = this.bg.get(MUSEUM_CROP_X, 0, width / 2, height);
+        tint(255, 255);
+        image(museumImg, width / 4, height / 2);
+
         // Description
         fill(0, 0, 0, 128);
         noStroke();
