@@ -375,8 +375,15 @@ class Artifact {
         rect(0, museumPos.y + 150, width / 2, height - (museumPos.y + 100));
         fill(255);
         textAlign(LEFT, TOP);
-        textSize(14);
+        textSize(16);
         text(this.desc, 10, museumPos.y + 160, width / 2 - 20);
+
+        // Title
+        stroke(0);
+        strokeWeight(3);
+        textSize(48);
+        textAlign(CENTER, CENTER);
+        text(this.name, width / 4, 70);
 
         // Shine effect
         let r = constrain((currPos.x - (width / 4)) / (width / 2), 0, 1);
