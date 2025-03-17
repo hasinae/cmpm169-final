@@ -31,9 +31,9 @@ const LERP_RATE = 0.05; // Rate of interpolation for artifact movement
 const HANDLE_SIZE = 40; // Size of grabbable area around artifact
 const BUTTON_SPACING = 255; // Distance from artifact to buttons
 const BUTTON_SIZE = 50;
-const MIN_MOVE_FREQ = 30; // Minimum # of frames in between random artifact movement 
+const MIN_MOVE_FREQ = 20; // Minimum # of frames in between random artifact movement 
 const MAX_MOVE_FREQ = 60; // Maximum # of frames in between random artifact movement
-const MOVE_DIFF = 200; // Maximum distance artifact can move randomly
+const MOVE_DIFF = 250; // Maximum distance artifact can move randomly
 
 // -- Globals -- //
 let artifacts = []; // Array of artifact objects
@@ -46,7 +46,7 @@ let canvasContainer;
 let isDragging = false;
 let isMoving = false;
 let mouseDown = false;
-let moveCounter = MAX_MOVE_FREQ;
+let moveCounter = MIN_MOVE_FREQ;
 let artifactOpacity = 255; // opacity of the current artifact
 let isTransitioning = false; // indicates if a transition is happening
 let atMuseum = false;
@@ -110,6 +110,7 @@ function resizeScreen() {
 function setup() {
     imageMode(CENTER);
     noStroke();
+    frameRate(60);
     canvasContainer = select("#canvas-container");
     let canvas = createCanvas(canvasContainer.width, canvasContainer.height);
     canvas.parent("canvas-container");
@@ -268,6 +269,7 @@ function handleArtifactDragging() {
         cursor(HAND);
         currPos = createVector(mouseX, mouseY);
         if (!isMoving) goalPos = createVector(mouseX, mouseY);
+        // Random movment behavior
         if (moveCounter == 0) {
             isMoving = true;
             isDragging = false;
@@ -323,8 +325,6 @@ function placeMarker() {
             stroke(0);
             textAlign(CENTER, CENTER);
             textSize(20);
-            console.log(i);
-            console.log(markerLabels[i]);
             text(markerLabels[i], markerPos[i][0], markerPos[i][1] + 30);
             if (mouseIsPressed && !mouseDown) {
                 mouseDown = true;
