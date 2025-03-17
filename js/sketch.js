@@ -6,35 +6,6 @@ for CMPM 169: Creative Coding
 Instructor: Wes Modes
 */
 
-// -- Constants -- //
-const MAP = 'map.jpg';
-const MARKER = 'marker.webp';
-const ARTIFACT_NAMES = ['moctezuma_headdress', 'Pöch_Collection', 'hoa_hakananai_a', 'tjentmutengebtiu_mummy', 'kohinoor', 'Cullinan_Diamond'];
-const SLIDESHOW_IMG_NAMES = [['aztec_parade.jpg', 'mexican_flag.jpg', 'ritual_dress.jpg', 'tenochtitlan.jpg'],
-['botswana_1.jpg', 'botswana_2.jpg', 'botswana_3.jpg', 'botswana_4.jpg'],
-['moai_hill.jpg', 'moai_line.jpg', 'rapa_nui_moai.jpg', 'rapa_nui_overlook.jpg'],
-['gizah_pyramids.jpg', 'habu_temple.jpg', 'sphinx.jpg', 'temple_column.jpg'],
-['kohinoor_1.webp', 'kohinoor_2.jpg', 'kohinoor_3.webp', 'kohinoor_4.webp'],
-['cullinan_1.jpg', 'cullinan_2.jpg', 'cullinan_3.jpg', 'cullinan_4.jpg']];
-const MUSEUM_IMG = ['weltmuseum.jpg', 'weltmuseum_posh.jpg', 'britishmuseum_hoa.png', 'britishmuseum_mummy.jpg', 'toweroflondon_kohinoor.png', 'toweroflondon_cullinan.png'];
-const HOMELAND_MUSIC = ['aztec_music.mp3', 'botswana_music.mp3', 'rapa_nui_music.mp3', 'egypt_music.mp3', 'southindian_music.mp3', 'southafrican_music.mp3'];
-/* music sources: 
-aztec_music: Jimena Contreras - Aztec Empire
-botswana_music: Captain Dira-Machobane ( Botswana )
-rapa_nui_music: Easter Island Folk Song - "Reo Topa"
-egypt_music: Royalty free Ancient Egypt Music 2 | Desert Fantasy Cleopatra | WOW Sound
-*/
-const MUSEUM_CROP_X = 400; // X value to crop museum images
-const SLIDESHOW_FADE_RATE = 2; // Change in tint per frame
-const ARTIFACT_FADE_RATE = 5;
-const LERP_RATE = 0.05; // Rate of interpolation for artifact movement
-const HANDLE_SIZE = 40; // Size of grabbable area around artifact
-const BUTTON_SPACING = 255; // Distance from artifact to buttons
-const BUTTON_SIZE = 50;
-const MIN_MOVE_FREQ = 20; // Minimum # of frames in between random artifact movement 
-const MAX_MOVE_FREQ = 60; // Maximum # of frames in between random artifact movement
-const MOVE_DIFF = 250; // Maximum distance artifact can move randomly
-
 // -- Globals -- //
 let artifacts = []; // Array of artifact objects
 let artifactData;
@@ -54,7 +25,7 @@ let atMuseum = false;
 let currArtifacts; // Array of artifacts at the current museum
 let currArtifact;
 let nextArtifactIndex;
-// -- Images
+// Images
 let artifactImgs = [];
 let slideshows = [[], [], [], [], [], []];
 let museumImgs = [];
@@ -65,7 +36,7 @@ let _mapImg;
 let _markerImg;
 let markerPos = [];
 let markerLabels = ['Weltmuseum', 'British Museum', 'Tower of London'];
-// -- Music
+// Music
 let homelandMusic = [];
 
 function preload() {
@@ -201,7 +172,6 @@ function draw() {
 function placeArtifacts() {
     for (let artifact of artifacts) {
         if (artifact.repatriated) {
-            console.log("drawing " + artifact.name);
             let i = artifacts.indexOf(artifact);
             let artifactMapImg = artifact.img.get();
             artifactMapImg.resize(artifact.size / 2, 0);
@@ -213,7 +183,6 @@ function placeArtifacts() {
 function handleButtons() {
     if (button(museumPos.x - BUTTON_SPACING, museumPos.y, "<")) {
         if (!isTransitioning) {
-            // TODO: Rewrite logic for changing artifacts
             let currArtifactIndex = currArtifacts.indexOf(currArtifact);
             nextArtifactIndex = currArtifactIndex - 1;
             if (nextArtifactIndex < 0) nextArtifactIndex = currArtifacts.length - 1;
@@ -222,7 +191,6 @@ function handleButtons() {
     }
     if (button(museumPos.x + BUTTON_SPACING, museumPos.y, ">")) {
         if (!isTransitioning) {
-            // TODO: Rewrite logic for changing artifacts
             let currArtifactIndex = currArtifacts.indexOf(currArtifact);
             nextArtifactIndex = currArtifactIndex + 1;
             if (nextArtifactIndex > currArtifacts.length - 1) nextArtifactIndex = 0;
@@ -307,18 +275,18 @@ function turnMusicOff() {
 
 function placeMarker() {
     for (let i = 0; i < markerPos.length; i++) {
-        image(_markerImg, markerPos[i][0], markerPos[i][1], 50, 50);
+        image(_markerImg, markerPos[i][0], markerPos[i][1], MARKER_SIZE, MARKER_SIZE);
     }
 
     // when you hover over marker, create buttons to select location
     for (let i = 0; i < markerPos.length; i++) {
-        if (abs(mouseX - markerPos[i][0]) < 10 && abs(mouseY - markerPos[i][1]) < 25) {
+        if (abs(mouseX - markerPos[i][0]) < MARKER_WIDTH && abs(mouseY - markerPos[i][1]) < MARKER_HEIGHT) {
             fill(255);
             cursor(HAND);
             stroke(0);
             textAlign(CENTER, CENTER);
             textSize(20);
-            text(markerLabels[i], markerPos[i][0], markerPos[i][1] + 30);
+            text(markerLabels[i], markerPos[i][0], markerPos[i][1] + LABEL_OFFSET);
             if (mouseIsPressed && !mouseDown) {
                 mouseDown = true;
                 switch (i) {
@@ -365,7 +333,7 @@ class Artifact {
     }
 
     draw() {
-        // Right side slideshow
+        // -- Right side slideshow -- //
         let slideshow = this.slideshow;
         // Get current and next images
         let currImg = slideshow[imgIndex];
@@ -384,7 +352,7 @@ class Artifact {
             nextImgOpacity = 0;
         }
 
-        // Left side museum image
+        // -- Left side museum image -- //
         let museumImg = this.bg.get(MUSEUM_CROP_X, 0, width / 2, height);
         tint(255, 255);
         image(museumImg, width / 4, height / 2);
