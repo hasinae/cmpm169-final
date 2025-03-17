@@ -1,0 +1,38 @@
+{
+    "moctezuma_headdress": {
+        "asset_name": "moctezuma_headdress",
+        "name": "Moctezuma Headdress",
+        "description": "Believed to have belonged to Moctezuma II, the Aztec emperor during the Spanish conquest of the early 16th century, this artifact is recognized to have been a symbol of political and religious power in ancient Mexico. Its origin and function are disputed, as there exists no known evidence proving that it belonged to Moctezuma II and it is unclear when and for what purposes it may have been worn. It is made of quetzal and other feathers, sewn together with gold detailing, and is currently held in the Weltmuseum (World Museum) in Vienna, Austria. Mexico has repeatedly requested the artifact be returned in ongoing repatriation dialogues.",
+        "size": 200
+    },
+    "Pöch_Collection": {
+        "asset_name": "Pöch_Collection",
+        "name": "Pöch Collection",
+        "description": "A collection of artifacts at the Weltmuseum collected by Rudolf Pöch. During 1870-1921, while Botswana was under British rule, the Austrain Academy of Sciences commissioned his travels where his focus was on collecting data on anthropological research. The museum holds 296 artifcats from this collection, to which to museum has acknowledged was collected unethically.",
+        "size": 600
+    },
+    "hoa_hakananai_a": {
+        "asset_name": "hoa_hakananai_a",
+        "name": "Hoa Hakananai'a",
+        "description": "A moai statue from Easter Island, created by the Rapa Nui people between the 11th and 12th centuries. The statue is carved from basalt and is about 2.5 meters in height. It is distinguishable by the carvings on its back, which are associated with the bird man religion. The statue was removed by a British ship's crew in 1868 and currently resides in the British Museum in London. In 2018, a written request was made for the return of Hoa Hakananai'a, and the museum met with representatives of Rapa Nui, but the statue remains on display in London.",
+        "size": 120
+    },
+    "tjentmutengebtiu_mummy": {
+        "asset_name": "tjentmutengebtiu_mummy",
+        "name": "Mummy of Tjentmutengebtiu",
+        "description": "A painted casting, holding the mummified remains of a priestess called Tjentmutengebtiu from Egypt's 21st dynasty. This artifact is currently in the British Museum.",
+        "size": 500
+    },
+    "kohinoor": {
+        "asset_name": "kohinoor",
+        "name": "Koh-i-Noor Diamond",
+        "description": "The history of this diamond hasn't been well documented, with many sources differing in the origin of the gem. However, it is believed to have originated from the Golconda mines in central southern India. It is a symbol of conquest and power, and some of its previous owners included Mughal Emperors, Shahs of Iran, and Emirs of Afghanistan. In 1849, the East India Company took the jewel from Maharaja Duleep Singh as part of the Treaty of Lahore to be surrendered to Queen Victoria. The diamond weighs 105.6 carats but was larger before it was recut in 1852 to fit European aesthetics.",
+        "size": 200
+    },
+    "Cullinan_Diamond": {
+        "asset_name": "Cullinan_Diamond",
+        "name": "Cullinan Diamond",
+        "description": "Discovered in South Africa in 1905 and named after the mine's chairman, Sir Thomas Cullinan. Since its discovery, it has remained the largest gem-quality uncut diamond in the world at 3106 carats. The rough stone was gifted to King Edward VII in 1907 and cut into nine major diamonds named Cullinan I through IX. Also known as the Great Star of Africa, Cullinan I weighs more than 530 carats and is mounted on the Sovereign's Scepter as part of the British royal family's priceless crown jewels. Activists in South Africa have called for the diamond's return, arguing that the diamond was stolen during the colonial era and not gifted.",
+        "size": 200
+    }
+}

@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>Repatriation of Artifacts - Restoring Cultural Brilliance</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <head>
+    <title>Repatriation of Artifacts - Restoring Cultural Brilliance</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-          crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
 
-  <script type="text/javascript" src="./js/site.js" defer></script>
-  <script type="text/javascript" src="./js/sketch.js" defer></script>
-</head>
-<body>
-  <main id="content">
-    <section>
-      <h1>Repatriation of Artifacts - Restoring Cultural Brilliance</h1>
-      <div class="minor-section">
-        <div id="canvas-container">
-          <!-- The canvas will be inserted here -->
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/addons/p5.sound.min.js"
+    ></script>
+
+    <script type="text/javascript" src="./js/site.js" defer></script>
+    <script type="text/javascript" src="./js/sketch.js" defer></script>
+  </head>
+  <body>
+    <main id="content">
+      <section>
+        <h1>Repatriation of Artifacts - Restoring Cultural Brilliance</h1>
+        <div class="minor-section">
+          <div id="canvas-container">
+            <!-- The canvas will be inserted here -->
+          </div>
+          <div class="fullscreen-box">
+            <button id="fullscreen-btn">Fullscreen</button>
+          </div>
         </div>
-        <div class="fullscreen-box">
-          <button id="fullscreen-btn">Fullscreen</button>
-        </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  <script>
-    document.getElementById("fullscreen-btn").addEventListener("click", function () {
-      let fs = fullscreen();
-      fullscreen(!fs);
-    });
-  </script>
-</body>
+    <script>
+      document.getElementById("fullscreen-btn").addEventListener(
+        "click",
+        function () {
+          let fs = fullscreen();
+          fullscreen(!fs);
+        },
+      );
+    </script>
+  </body>
 </html>
