@@ -40,7 +40,7 @@ let markerLabels = ['Weltmuseum', 'British Museum', 'Tower of London'];
 let homelandMusic = [];
 
 function preload() {
-    artifactData = loadJSON('/artifactData.json');
+    artifactData = loadJSON('assets/artifactData.json');
 
     for (let i = 0; i < ARTIFACT_NAMES.length; i++) {
         // Load artifact image and add to corresponding array
